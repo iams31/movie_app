@@ -1,11 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import "./index.css";
 import App from "./components/App";
 import reducer from "./reducers/index";
+// const logger=function(obj){//this object have two properties called dispatch and getstate so that  it will be same as store
 
-const store = createStore(reducer);
+// }
+//curried logger function
+//logger(obj)(next)(action)
+const logger =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    //middleware code
+    console.log("ACTION_TYPE= ", action.type);
+    next(action);
+  };
+
+const store = createStore(reducer, applyMiddleware(logger));
 // console.log(store.getState())
 // store.dispatch({
 
