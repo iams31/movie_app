@@ -35,15 +35,27 @@ export function showFavourite(val) {
     val,
   };
 }
-export function addMoviestoList(movie) {
+export function addMoviestoList(movies) {
   return {
     type: ADD_SEARCH_RESULT,
-    movie,
+    movies,
   };
 }
 export function addMovieSearchResult(movie) {
   return {
     type: ADD_SEARCH_RESULT,
     movie,
+  };
+}
+export function handleMovieSearch(movie) {
+  //adding movie to the reducer and fetching api
+  const url = `http://www.omdbapi.com/?i=tt3896198&apikey=56c47db5&t=${movie}`;
+  return function (dispatch) {
+    fetch(url)
+      .then((response) => response.json())
+      .then((movie) => {
+        // console.log(movie);
+        dispatch(addMovieSearchResult(movie));
+      });
   };
 }

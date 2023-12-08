@@ -33,7 +33,11 @@ class App extends React.Component {
     const displayMovies = showFavourite ? favourate : list;
     return (
       <div className="App">
-        <Navbar search={search} />
+        <Navbar
+          movies={movies}
+          search={search}
+          dispatch={this.props.store.dispatch}
+        />
         <div className="main">
           <div className="tabs">
             <div
