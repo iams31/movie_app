@@ -1,8 +1,9 @@
 import React from "react";
-import Navbar from "./Navbar";
 import { data } from "../data";
 import MovieCard from "./MovieCard";
 import { addMovies, showFavourite } from "../actions/index";
+import { storeContext } from "../index";
+import NavbarWrapper from "./Navbar";
 class App extends React.Component {
   componentDidMount() {
     //Make api call
@@ -33,7 +34,7 @@ class App extends React.Component {
     const displayMovies = showFavourite ? favourate : list;
     return (
       <div className="App">
-        <Navbar
+        <NavbarWrapper
           movies={movies}
           search={search}
           dispatch={this.props.store.dispatch}
@@ -69,4 +70,15 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+//Creating app wrapper class
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <storeContext.Consumer>
+        {(store) => <App store={store} />}
+      </storeContext.Consumer>
+    );
+  }
+}
+
+export default AppWrapper;

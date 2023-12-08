@@ -3,8 +3,10 @@ import ReactDOM from "react-dom/client";
 import { createStore, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 import "./index.css";
-import App from "./components/App";
+
 import reducer from "./reducers/index";
+import { createContext } from "react";
+import AppWrapper from "./components/App";
 
 // const logger=function(obj){//this object have two properties called dispatch and getstate so that  it will be same as store
 
@@ -28,6 +30,17 @@ const logger =
 
 //   next(action);
 // };
+export const storeContext = createContext();
+class Provider extends React.Component {
+  render() {
+    const { store } = this.props;
+    return (
+      <storeContext.Provider value={store}>
+        {this.props.children}
+      </storeContext.Provider>
+    );
+  }
+}
 const store = createStore(reducer, applyMiddleware(logger, thunk));
 // console.log(store.getState())
 // store.dispatch({
@@ -37,7 +50,11 @@ const store = createStore(reducer, applyMiddleware(logger, thunk));
 // })
 // console.log('State after dispatch: ', store.getState())
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App store={store} />);
+root.render(
+  <Provider store={store}>
+    <AppWrapper />
+  </Provider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

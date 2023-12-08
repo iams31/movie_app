@@ -10,6 +10,7 @@ export const ADD_UNFAVOURATES = "ADD_UNFAVOURATES";
 export const SHOW_FAVOURITE = "SHOW_FAVOURITE";
 export const ADD_MOVIE_TO_LIST = "ADD_MOVIE_TO_LIST";
 export const ADD_SEARCH_RESULT = "ADD_SEARCH_RESULT";
+export const SHOW_SEARCH = "SHOW_SEARCH";
 //action creators
 export function addMovies(movies) {
   return {
@@ -57,5 +58,11 @@ export function handleMovieSearch(movie) {
         // console.log(movie);
         dispatch(addMovieSearchResult(movie));
       });
+  };
+}
+export function shutShowSearch(val) {
+  return {
+    type: SHOW_SEARCH,
+    val,
   };
 }
