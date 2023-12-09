@@ -3,10 +3,9 @@ import ReactDOM from "react-dom/client";
 import { createStore, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 import "./index.css";
-
+import { Provider } from "react-redux";
 import reducer from "./reducers/index";
-import { createContext } from "react";
-import AppWrapper from "./components/App";
+import App from "./components/App";
 
 // const logger=function(obj){//this object have two properties called dispatch and getstate so that  it will be same as store
 
@@ -30,17 +29,54 @@ const logger =
 
 //   next(action);
 // };
-export const storeContext = createContext();
-class Provider extends React.Component {
-  render() {
-    const { store } = this.props;
-    return (
-      <storeContext.Provider value={store}>
-        {this.props.children}
-      </storeContext.Provider>
-    );
-  }
-}
+// export const storeContext = createContext();
+// class Provider extends React.Component {
+//   render() {
+//     const { store } = this.props;
+//     return (
+//       <storeContext.Provider value={store}>
+//         {this.props.children}
+//       </storeContext.Provider>
+//     );
+//   }
+// }
+// export function connect(callback) {
+//   return function (Component) {
+//     class ConnectedComponent extends React.Component {
+//       constructor(props) {
+//         super(props);
+//         this.unsubscribe = this.props.store.subscribe(() => {
+//           this.forceUpdate();
+//         });
+//       }
+
+//       componentWillUnmount() {
+//         this.unsubscribe();
+//       }
+//       render() {
+//         const { store } = this.props;
+//         const state = store.getState();
+//         const dataToBeSentAsProps = callback(state);
+
+//         return <Component dispatch={store.dispatch} {...dataToBeSentAsProps} />;
+//       }
+//     }
+
+//     class ConnectedComponentWrapper extends React.Component {
+//       render() {
+//         return (
+//           <storeContext.Consumer>
+//             {(store) => {
+//               return <ConnectedComponent store={store} />;
+//             }}
+//           </storeContext.Consumer>
+//         );
+//       }
+//     }
+//     return ConnectedComponentWrapper;
+//   };
+// }
+
 const store = createStore(reducer, applyMiddleware(logger, thunk));
 // console.log(store.getState())
 // store.dispatch({
@@ -49,10 +85,12 @@ const store = createStore(reducer, applyMiddleware(logger, thunk));
 //   movies:[{name:'XXX'}]
 // })
 // console.log('State after dispatch: ', store.getState())
+//Connect(callback)(app)
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <AppWrapper />
+    <App />
   </Provider>
 );
 

@@ -38,7 +38,7 @@ export function showFavourite(val) {
 }
 export function addMoviestoList(movies) {
   return {
-    type: ADD_SEARCH_RESULT,
+    type: ADD_MOVIE_TO_LIST,
     movies,
   };
 }

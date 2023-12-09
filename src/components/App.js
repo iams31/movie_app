@@ -2,22 +2,17 @@ import React from "react";
 import { data } from "../data";
 import MovieCard from "./MovieCard";
 import { addMovies, showFavourite } from "../actions/index";
-import { storeContext } from "../index";
+import { connect } from "react-redux";
 import NavbarWrapper from "./Navbar";
 class App extends React.Component {
   componentDidMount() {
     //Make api call
     //Dispatch function
-    const { store } = this.props;
-    store.subscribe(() => {
-      console.log("UPDATED");
-      this.forceUpdate();
-    });
-    store.dispatch(addMovies(data));
-    console.log(store.getState());
+    this.props.dispatch(addMovies(data));
+    console.log(this.props);
   }
   isMovieFavourate = (movie) => {
-    const { movies } = this.props.store.getState();
+    const { movies } = this.props;
     const { favourate } = movies;
     const index = favourate.indexOf(movie);
     if (index !== -1) {
@@ -26,10 +21,10 @@ class App extends React.Component {
     return false;
   };
   onChangeTab = (val) => {
-    this.props.store.dispatch(showFavourite(val));
+    this.props.dispatch(showFavourite(val));
   };
   render() {
-    const { movies, search } = this.props.store.getState();
+    const { movies, search } = this.props;
     const { list, showFavourite, favourate } = movies;
     const displayMovies = showFavourite ? favourate : list;
     return (
@@ -37,7 +32,7 @@ class App extends React.Component {
         <NavbarWrapper
           movies={movies}
           search={search}
-          dispatch={this.props.store.dispatch}
+          dispatch={this.props.dispatch}
         />
         <div className="main">
           <div className="tabs">
@@ -61,7 +56,7 @@ class App extends React.Component {
             <MovieCard
               movies={movie}
               key={`movies-${index}`}
-              dispatch={this.props.store.dispatch}
+              dispatch={this.props.dispatch}
               isFavourate={this.isMovieFavourate(movie)}
             />
           ))}
@@ -71,14 +66,21 @@ class App extends React.Component {
   }
 }
 //Creating app wrapper class
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <storeContext.Consumer>
-        {(store) => <App store={store} />}
-      </storeContext.Consumer>
-    );
-  }
+// class AppWrapper extends React.Component {
+//   render() {
+//     return (
+//       <storeContext.Consumer>
+//         {(store) => <App store={store} />}
+//       </storeContext.Consumer>
+//     );
+//   }
+// }
+//Connect
+function mapStateToProps(state) {
+  return {
+    movies: state.movies,
+    search: state.search,
+  };
 }
-
-export default AppWrapper;
+const connectedAppComponent = connect(mapStateToProps)(App);
+export default connectedAppComponent;

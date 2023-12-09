@@ -1,7 +1,6 @@
 import React from "react";
-import { storeContext } from "../index";
 import { addMoviestoList, handleMovieSearch, shutShowSearch } from "../actions";
-
+import { connect } from "react-redux";
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +10,7 @@ class Navbar extends React.Component {
     };
   }
   handleAddToMovies = (movie) => {
+    console.log(movie);
     this.props.dispatch(addMoviestoList(movie));
   };
   handleSearch = () => {
@@ -49,31 +49,34 @@ class Navbar extends React.Component {
                 <img src={results.Poster} alt="search-pic" />
                 <div className="movie-info">
                   <span>{results.Title}</span>
-                  <span>{results.Actors}</span>
+                  <span style={{ fontSize: 10 }}>{results.Actors}</span>
                   <button onClick={() => this.handleAddToMovies(results)}>
                     Add to Movies
                   </button>
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
       </div>
     );
   }
 }
 //Creating NavbarWrapper so that we can access the store here at any place
-class NavbarWrapper extends React.Component {
-  render() {
-    return (
-      <storeContext.Consumer>
-        {(store) => (
-          <Navbar dispatch={store.dispatch} search={this.props.search} />
-        )}
-      </storeContext.Consumer>
-    );
-  }
+// class NavbarWrapper extends React.Component {
+//   render() {
+//     return (
+//       <storeContext.Consumer>
+//         {(store) => (
+//           <Navbar dispatch={store.dispatch} search={this.props.search} />
+//         )}
+//       </storeContext.Consumer>
+//     );
+//   }
+// }
+function mapStateToProps({ search }) {
+  return {
+    search,
+  };
 }
-export default NavbarWrapper;
+export default connect(mapStateToProps)(Navbar);

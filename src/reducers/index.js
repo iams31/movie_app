@@ -40,7 +40,11 @@ export function movies(state = initialMovieState, action) {
         ...state,
         showFavourite: action.val,
       };
-
+    case ADD_MOVIE_TO_LIST:
+      return {
+        ...state,
+        list: [...state.list, action.movies],
+      };
     default:
       return state;
   }
@@ -60,7 +64,6 @@ export function search(state = initialSearchState, action) {
     case ADD_MOVIE_TO_LIST:
       return {
         ...state,
-        results: action.movie,
         showSearchResults: false,
       };
     case SHOW_SEARCH:
